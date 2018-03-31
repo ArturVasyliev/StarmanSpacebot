@@ -3,10 +3,10 @@ using System.Net;
 
 namespace StarmanLibrary.Integrations.MAAS2
 {
-    public class Maas2Response
+    public class MarsStatus
     {
         [JsonProperty("status")]
-        public HttpStatusCode Status { get; set; }
+        public HttpStatusCode HttpStatus { get; set; }
 
         [JsonProperty("sol")]
         public int Sol { get; set; }

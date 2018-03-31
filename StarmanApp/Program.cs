@@ -10,6 +10,8 @@ using Telegram.Bot.Types.InlineKeyboardButtons;
 using Telegram.Bot.Types.ReplyMarkups;
 using StarmanLibrary.Integrations.MAAS2;
 using StarmanLibrary;
+using StarmanLibrary.Integrations.OpenNotify;
+using StarmanLibrary.Integrations.GoogleMaps;
 
 namespace StarmanApp
 {
@@ -29,9 +31,9 @@ namespace StarmanApp
 
             var r = Maas2.GetCurrentMarsStatus();
             var r1 = Maas2.GetMarsStatusBySol(1);
-            var r2 = Maas2.GetMarsStatusBySol(190);
-            var r3 = Maas2.GetMarsStatusBySol(200);
-            var r4 = Maas2.GetMarsStatusBySol(2000000);
+            var r2 = OpenNotify.GetHumansInSpace();
+            var r3 = OpenNotify.GetIssData();
+            var r4 = GoogleMaps.GetAddressByLocation(r3.Position.Latitude, r3.Position.Longitude);
         }
 
         private static async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
