@@ -27,63 +27,39 @@ namespace StarmanLibrary.Integrations.SpaceX
     {
         private static readonly string _baseUrl = new Configuration().SpacexBaseUrl;
 
-        public static string GetCompanyInfo()
+        public static Company GetCompanyInfo()
         {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/info");
+            var apiProvider = new ApiRequestProvider<Company>(_baseUrl + $"/info");
             return apiProvider.GetResponse();
         }
 
-        public static string GetRockets()
+        public static Rocket[] GetRockets()
         {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/rockets");
+            var apiProvider = new ApiRequestProvider<Rocket[]>(_baseUrl + $"/rockets");
             return apiProvider.GetResponse();
         }
 
-        public static string GetRocketById(string rocketId)
+        public static Rocket GetRocketById(string rocketId)
         {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/rockets/{rocketId}");
+            var apiProvider = new ApiRequestProvider<Rocket>(_baseUrl + $"/rockets/{rocketId}");
             return apiProvider.GetResponse();
         }
 
-        public static string GetCapsules()
+        public static Launch GetLatestLaunch()
         {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/capsules");
+            var apiProvider = new ApiRequestProvider<Launch>(_baseUrl + $"/launches/latest");
             return apiProvider.GetResponse();
         }
 
-        public static string GetCapsuleById(string capsuleId)
+        public static Launch[] GetAllPastLaunches()
         {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/capsules/{capsuleId}");
+            var apiProvider = new ApiRequestProvider<Launch[]>(_baseUrl + $"/launches");
             return apiProvider.GetResponse();
         }
 
-        public static string GetLaunchpads()
+        public static Launch[] GetAllUpcomingLaunches()
         {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/launchpads");
-            return apiProvider.GetResponse();
-        }
-
-        public static string GetLaunchpadById(string launchpadId)
-        {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/launchpads/k{launchpadId}");
-            return apiProvider.GetResponse();
-        }
-
-        public static string GetLatestLaunch()
-        {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/launches/latest");
-            return apiProvider.GetResponse();
-        }
-
-        public static string GetAllPastLaunches()
-        {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/launches");
-            return apiProvider.GetResponse();
-        }
-
-        public static string GetAllUpcomingLaunches()
-        {
-            var apiProvider = new ApiRequestProvider<string>(_baseUrl + $"/launches/upcoming");
+            var apiProvider = new ApiRequestProvider<Launch[]>(_baseUrl + $"/launches/upcoming");
             return apiProvider.GetResponse();
         }
     }

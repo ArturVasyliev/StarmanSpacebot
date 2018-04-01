@@ -1,6 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using StarmanLibrary;
 using System;
-using System.IO;
 using System.Threading.Tasks;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -8,10 +7,6 @@ using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;
 using Telegram.Bot.Types.InlineKeyboardButtons;
 using Telegram.Bot.Types.ReplyMarkups;
-using StarmanLibrary.Integrations.MAAS2;
-using StarmanLibrary;
-using StarmanLibrary.Integrations.OpenNotify;
-using StarmanLibrary.Integrations.GoogleMaps;
 
 namespace StarmanApp
 {
@@ -21,19 +16,23 @@ namespace StarmanApp
 
         static void Main(string[] args)
         {
-            //var me = Bot.GetMeAsync().Result;
+            var me = Bot.GetMeAsync().Result;
 
-            //Bot.OnMessage += BotOnMessageReceived;
-            //Bot.StartReceiving();
-            //Console.WriteLine($"Start listening for @{me.Username}");
-            //Console.ReadLine();
-            //Bot.StopReceiving();
+            Bot.OnMessage += BotOnMessageReceived;
+            Bot.StartReceiving();
+            Console.WriteLine($"Start listening for @{me.Username}");
+            Console.ReadLine();
+            Bot.StopReceiving();
 
-            var r = Maas2.GetCurrentMarsStatus();
-            var r1 = Maas2.GetMarsStatusBySol(1);
-            var r2 = OpenNotify.GetHumansInSpace();
-            var r3 = OpenNotify.GetIssData();
-            var r4 = GoogleMaps.GetAddressByLocation(r3.Position.Latitude, r3.Position.Longitude);
+            //var r = Maas2.GetCurrentMarsStatus();
+            //var r1 = Maas2.GetMarsStatusBySol(1);
+            //var r2 = OpenNotify.GetHumansInSpace();
+            //var r3 = OpenNotify.GetIssData();
+            //var r4 = GoogleMaps.GetAddressByLocation(r3.Position.Latitude, r3.Position.Longitude);
+            //var r5 = Nasa.GetAstroPicOfTheDay(DateTime.Now);
+            //var r6 = Nasa.GetAstroPicOfTheDay(new DateTime(2017, 11, 2));
+            //var r7 = Nasa.GetTheLatestPicOfTheEarth();
+
         }
 
         private static async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
@@ -98,19 +97,6 @@ Usage:
                         replyMarkup: new ReplyKeyboardRemove());
                     break;
             }
-        }
-
-        static string GetBotAPIKey()
-        {
-            string configuration;
-
-            using(StreamReader sr = new StreamReader("starman.json"))
-            {
-                configuration = sr.ReadToEnd();
-            }
-
-            JObject obj = JObject.Parse(configuration);
-            return (string)obj["ApiKey"];
         }
     }
 }

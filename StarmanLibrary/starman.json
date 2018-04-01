@@ -1,0 +1,11 @@
+﻿{
+  "TelegramBotAPIKey": "",
+  "Maas2BaseUrl": "https://api.maas2.jiinxt.com",
+  "SpacexBaseUrl": "https://api.spacexdata.com/v2",
+  "OpenNotifyBaseUrl": "http://api.open-notify.org",
+  "GoogleMapsBaseUrl": "https://maps.googleapis.com/maps/api/geocode",
+  "GoogleMapsAPIKey": "",
+  "NasaAPIKey": "",
+  "NasaBaseUrlAPOD": "https://api.nasa.gov/planetary/apod",
+  "NasaBaseUrlEPIC": "https://epic.gsfc.nasa.gov"
+}

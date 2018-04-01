@@ -7,10 +7,14 @@ namespace StarmanLibrary
     {
         public readonly string TelegramBotAPIKey;
         public readonly string GoogleMapsAPIKey;
+        public readonly string NasaAPIKey;
+
         public readonly string Maas2BaseUrl;
         public readonly string SpacexBaseUrl;
         public readonly string OpenNotifyBaseUrl;
         public readonly string GoogleMapsBaseUrl;
+        public readonly string NasaBaseUrlAPOD;
+        public readonly string NasaBaseUrlEPIC;
 
         public Configuration()
         {
@@ -24,10 +28,13 @@ namespace StarmanLibrary
             JObject obj = JObject.Parse(configuration);
             TelegramBotAPIKey = (string)obj["TelegramBotAPIKey"];
             GoogleMapsAPIKey = (string)obj["GoogleMapsAPIKey"];
+            NasaAPIKey = (string)obj["NasaAPIKey"];
             Maas2BaseUrl = (string)obj["Maas2BaseUrl"];
             SpacexBaseUrl = (string)obj["SpacexBaseUrl"];
             OpenNotifyBaseUrl = (string)obj["OpenNotifyBaseUrl"];
             GoogleMapsBaseUrl = (string)obj["GoogleMapsBaseUrl"];
+            NasaBaseUrlAPOD = (string)obj["NasaBaseUrlAPOD"];
+            NasaBaseUrlEPIC = (string)obj["NasaBaseUrlEPIC"];
         }
     }
 }

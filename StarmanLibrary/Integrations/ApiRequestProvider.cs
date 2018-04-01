@@ -28,10 +28,18 @@ namespace StarmanLibrary.Integrations
                 responseMessage = sr.ReadToEnd();
             }
 
-            JObject obj = JObject.Parse(responseMessage);
-            T resultObject = JsonConvert.DeserializeObject<T>(obj.ToString());
+            Type typeOfT = typeof(T);
 
-            return resultObject;
+            if (typeOfT.IsArray)
+            {
+                JArray array = JArray.Parse(responseMessage);
+                return JsonConvert.DeserializeObject<T>(array.ToString());
+            }
+            else
+            {
+                JObject obj = JObject.Parse(responseMessage);
+                return JsonConvert.DeserializeObject<T>(obj.ToString());
+            }
         }
     }
 }
