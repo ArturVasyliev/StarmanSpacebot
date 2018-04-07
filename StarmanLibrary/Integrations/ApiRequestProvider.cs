@@ -20,7 +20,18 @@ namespace StarmanLibrary.Integrations
         public T GetResponse()
         {
             HttpWebRequest request = WebRequest.CreateHttp(_apiUrl);
-            WebResponse webResponse = request.GetResponse();
+
+            WebResponse webResponse = null;
+
+            try
+            {
+                webResponse = request.GetResponse();
+            }
+            catch (WebException)
+            {
+                //log
+                return default(T);
+            }
 
             string responseMessage;
             using (StreamReader sr = new StreamReader(webResponse.GetResponseStream(), Encoding.UTF8, true))

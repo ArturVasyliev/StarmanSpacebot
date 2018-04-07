@@ -13,6 +13,7 @@ namespace StarmanLibrary
         public readonly string SpacexBaseUrl;
         public readonly string OpenNotifyBaseUrl;
         public readonly string GoogleMapsBaseUrl;
+        public readonly string BurningSoulBaseUrl;
         public readonly string NasaBaseUrlAPOD;
         public readonly string NasaBaseUrlEPIC;
 
@@ -33,6 +34,7 @@ namespace StarmanLibrary
             SpacexBaseUrl = (string)obj["SpacexBaseUrl"];
             OpenNotifyBaseUrl = (string)obj["OpenNotifyBaseUrl"];
             GoogleMapsBaseUrl = (string)obj["GoogleMapsBaseUrl"];
+            BurningSoulBaseUrl = (string)obj["BurningSoulBaseUrl"];
             NasaBaseUrlAPOD = (string)obj["NasaBaseUrlAPOD"];
             NasaBaseUrlEPIC = (string)obj["NasaBaseUrlEPIC"];
         }

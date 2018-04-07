@@ -4,6 +4,7 @@
   "SpacexBaseUrl": "https://api.spacexdata.com/v2",
   "OpenNotifyBaseUrl": "http://api.open-notify.org",
   "GoogleMapsBaseUrl": "https://maps.googleapis.com/maps/api/geocode",
+  "BurningSoulBaseUrl": "http://api.burningsoul.in/moon/",
   "GoogleMapsAPIKey": "",
   "NasaAPIKey": "",
   "NasaBaseUrlAPOD": "https://api.nasa.gov/planetary/apod",
