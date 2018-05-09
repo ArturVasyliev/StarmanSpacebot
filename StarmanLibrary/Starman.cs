@@ -15,8 +15,8 @@ namespace StarmanLibrary
 {
     public class Starman : IDisposable
     {
-        private readonly ITelegramBotClient _bot = new TelegramBotClient(new Configuration().TelegramBotAPIKey);
-        private readonly ICommunicationService _communicationService = new CommunicationService();
+        private readonly ITelegramBotClient _bot;
+        private readonly ICommunicationService _communicationService;
 
         public Starman(ITelegramBotClient botClient, ICommunicationService communicationService)
         {
@@ -84,32 +84,26 @@ namespace StarmanLibrary
             }));
         }
 
-        // This method handles messages and main buttons
-        public async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        public async void ProcessMessage(string text, long chatId)
         {
-            Console.WriteLine("BotOnMessageReceived");
-            var message = messageEventArgs.Message;
-
-            if (message == null || message.Type != MessageType.TextMessage) return;
-
-            await _bot.SendChatActionAsync(message.Chat.Id, ChatAction.Typing);
+            await _bot.SendChatActionAsync(chatId, ChatAction.Typing);
 
             string responseText = string.Empty;
             IReplyMarkup replyKeyboard = null;
 
-            switch (message.Text)
+            switch (text)
             {
                 case "/start":
                     responseText = _communicationService.GetHelloMessage();
                     replyKeyboard = GetMainKeyboard();
-                    await _bot.SendTextMessageAsync(message.Chat.Id, responseText, replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "Mars 🌕":
                 case "/mars":
                     responseText = _communicationService.GetMarsStatus();
                     replyKeyboard = GetMainKeyboard();
                     await _bot.SendTextMessageAsync(
-                        message.Chat.Id,
+                        chatId,
                         responseText,
                         replyMarkup: replyKeyboard);
                     break;
@@ -118,7 +112,7 @@ namespace StarmanLibrary
                     responseText = _communicationService.GetMoonStatus();
                     replyKeyboard = GetMainKeyboard();
                     await _bot.SendTextMessageAsync(
-                        message.Chat.Id,
+                        chatId,
                         responseText,
                         replyMarkup: replyKeyboard);
                     break;
@@ -126,10 +120,10 @@ namespace StarmanLibrary
                 case "/iss":
                     responseText = _communicationService.GetIssStatusText();
                     replyKeyboard = GetMainKeyboard();
-                    await _bot.SendTextMessageAsync(message.Chat.Id, responseText, replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
 
                     var location = _communicationService.GetIssPosition();
-                    await _bot.SendLocationAsync(message.Chat.Id, (float)location[0], (float)location[1], replyMarkup: replyKeyboard);
+                    await _bot.SendLocationAsync(chatId, (float)location[0], (float)location[1], replyMarkup: replyKeyboard);
                     break;
                 case "SpaceX 🚀":
                     // define the logic
@@ -138,29 +132,40 @@ namespace StarmanLibrary
                 case "/astronauts":
                     responseText = _communicationService.GetHumansInSpace();
                     replyKeyboard = GetMainKeyboard();
-                    await _bot.SendTextMessageAsync(message.Chat.Id, responseText, replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "Pics 🖼️":
                 case "/pics":
                     responseText = _communicationService.GetSpacePics();
                     replyKeyboard = GetPicsKeyboard();
-                    await _bot.SendTextMessageAsync(message.Chat.Id, responseText, replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "/help":
                     responseText = _communicationService.GetHelp();
                     replyKeyboard = GetMainKeyboard();
-                    await _bot.SendTextMessageAsync(message.Chat.Id, responseText, replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "/settings":
                     responseText = _communicationService.GetSettings();
                     replyKeyboard = GetMainKeyboard();
-                    await _bot.SendTextMessageAsync(message.Chat.Id, responseText, replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 default:
                     responseText = _communicationService.GetDefaultResponse();
-                    await _bot.SendTextMessageAsync(message.Chat.Id, responseText, replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
             }
+        }
+
+        // This method handles messages and main buttons
+        public async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        {
+            Console.WriteLine("BotOnMessageReceived");
+            var message = messageEventArgs.Message;
+
+            if (message == null || message.Type != MessageType.TextMessage) return;
+
+            ProcessMessage(message.Text, message.Chat.Id);
         }
 
         // This method handles inline buttons
