@@ -23,7 +23,14 @@ namespace StarmanApp
 
             starman.Start();
             Console.WriteLine($"Start listening for @{me.Username}");
-            Console.ReadLine();
+
+
+            var stopWord = Console.ReadLine();
+            while(stopWord.ToLower() != "shutdown")
+            {
+                stopWord = Console.ReadLine();
+            }
+
             starman.Stop();
 
             //var r = Maas2.GetCurrentMarsStatus();
