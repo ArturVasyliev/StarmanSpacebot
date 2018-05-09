@@ -13,14 +13,16 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace StarmanLibrary
 {
-    public class Starman
+    public class Starman : IDisposable
     {
         private readonly ITelegramBotClient _bot = new TelegramBotClient(new Configuration().TelegramBotAPIKey);
         private readonly ICommunicationService _communicationService = new CommunicationService();
 
-
-        public Starman()
+        public Starman(ITelegramBotClient botClient, ICommunicationService communicationService)
         {
+            _bot = botClient;
+            _communicationService = communicationService;
+
             _bot.OnCallbackQuery += BotOnCallbackQueryReceived;
             _bot.OnInlineQuery += BotOnInlineQueryReceived;
             _bot.OnInlineResultChosen += BotOnInlineResultChosenReceived;
@@ -29,6 +31,21 @@ namespace StarmanLibrary
             _bot.OnReceiveError += BotOnReceiveErrorReceived;
             _bot.OnReceiveGeneralError += BotOnReceiveGeneralErrorReceived;
             _bot.OnUpdate += BotOnUpdateReceived;
+        }
+
+        public void Dispose()
+        {
+            if (_bot != null)
+            {
+                _bot.OnCallbackQuery -= BotOnCallbackQueryReceived;
+                _bot.OnInlineQuery -= BotOnInlineQueryReceived;
+                _bot.OnInlineResultChosen -= BotOnInlineResultChosenReceived;
+                _bot.OnMessage -= BotOnMessageReceived;
+                _bot.OnMessageEdited -= BotOnMessageEditedReceived;
+                _bot.OnReceiveError -= BotOnReceiveErrorReceived;
+                _bot.OnReceiveGeneralError -= BotOnReceiveGeneralErrorReceived;
+                _bot.OnUpdate -= BotOnUpdateReceived;
+            }
         }
 
         public async Task<User> GetMe()
@@ -46,31 +63,29 @@ namespace StarmanLibrary
             _bot.StopReceiving();
         }
 
+        private IReplyMarkup mainKeyboard;
         private IReplyMarkup GetMainKeyboard()
         {
-            var mainKeyboard = new ReplyKeyboardMarkup(new KeyboardButton[][]
+            return mainKeyboard ?? (mainKeyboard = new ReplyKeyboardMarkup(new KeyboardButton[][]
             {
                 new [] {new KeyboardButton("Mars 🌕"), new KeyboardButton("Moon 🌑") },
                 new [] {new KeyboardButton("ISS 🛰️"), new KeyboardButton("SpaceX 🚀") },
                 new [] {new KeyboardButton("Astronauts 👨🏻‍🚀"), new KeyboardButton("Pics 🖼️") }
-            });
-
-            return mainKeyboard;
+            }));
         }
 
+        private IReplyMarkup picsKeyboard;
         private IReplyMarkup GetPicsKeyboard()
         {
-            var picsKeyboard = new InlineKeyboardMarkup(new[]
+            return picsKeyboard ?? (picsKeyboard = new InlineKeyboardMarkup(new[]
             {
                 new [] { InlineKeyboardButton.WithCallbackData("Astro Pic Of The Day", "APOD") },
                 new [] { InlineKeyboardButton.WithCallbackData("Earth Pic", "Earth Pic") }
-            });
-
-            return picsKeyboard;
+            }));
         }
 
         // This method handles messages and main buttons
-        private async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        public async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             Console.WriteLine("BotOnMessageReceived");
             var message = messageEventArgs.Message;
@@ -87,10 +102,7 @@ namespace StarmanLibrary
                 case "/start":
                     responseText = _communicationService.GetHelloMessage();
                     replyKeyboard = GetMainKeyboard();
-                    await _bot.SendTextMessageAsync(
-                        message.Chat.Id,
-                        responseText,
-                        replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(message.Chat.Id, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "Mars 🌕":
                 case "/mars":
@@ -152,7 +164,7 @@ namespace StarmanLibrary
         }
 
         // This method handles inline buttons
-        private async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
+        public async void BotOnCallbackQueryReceived(object sender, CallbackQueryEventArgs callbackQueryEventArgs)
         {
             Console.WriteLine("BotOnCallbackQueryReceived");
             var callbackQuery = callbackQueryEventArgs.CallbackQuery;

@@ -1,14 +1,7 @@
 ﻿using StarmanLibrary;
+using StarmanLibrary.Services;
 using System;
-using System.Threading.Tasks;
 using Telegram.Bot;
-using Telegram.Bot.Args;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
-using Telegram.Bot.Types.InlineKeyboardButtons;
-using Telegram.Bot.Types.InlineQueryResults;
-using Telegram.Bot.Types.InputMessageContents;
-using Telegram.Bot.Types.ReplyMarkups;
 
 namespace StarmanApp
 {
@@ -16,7 +9,10 @@ namespace StarmanApp
     {
         static void Main(string[] args)
         {
-            Starman starman = new Starman();
+            var botClient = new TelegramBotClient(new Configuration().TelegramBotAPIKey);
+            var communicationService = new CommunicationService();
+
+            Starman starman = new Starman(botClient, communicationService);
 
             var me = starman.GetMe().Result;
 
