@@ -207,11 +207,7 @@ namespace StarmanLibrary
             switch (callbackQuery.Data)
             {
                 case "APOD":
-                    var re = Nasa.GetAstroPicOfTheDay(DateTime.Now);
-                    if (re == null)
-                    {
-                        re = Nasa.GetAstroPicOfTheDay(DateTime.Now - TimeSpan.FromDays(1));
-                    }
+                    var picture = _communicationService.GetPicOfTheDayInfo();
                     inlineKeyboard = new InlineKeyboardMarkup(new[]
                     {
                         new [] { InlineKeyboardButton.WithCallbackData("Watch description", "APOD Description") }
@@ -219,38 +215,33 @@ namespace StarmanLibrary
 
                     await _bot.SendPhotoAsync(
                             callbackQuery.Message.Chat.Id,
-                            new FileToSend(new Uri(re.Url)),
-                            re.Title,
+                            new FileToSend(new Uri(picture[1])),
                             replyMarkup: inlineKeyboard);
                     break;
                 case "Earth Pic":
-                    var earthPic = Nasa.GetTheLatestPicOfTheEarth();
+                    var earthPic = _communicationService.GetPicOfTheEarthInfo();
                     inlineKeyboard = new InlineKeyboardMarkup(new[]
                     {
                         new [] { InlineKeyboardButton.WithCallbackData("Get location", "EarthPicLocation") }
                     });
                     await _bot.SendPhotoAsync(
                             callbackQuery.Message.Chat.Id,
-                            new FileToSend(new Uri(earthPic.ImageUrl)),
-                            earthPic.ImageTitle,
+                            new FileToSend(new Uri(earthPic[1])),
+                            earthPic[0],
                             replyMarkup: inlineKeyboard);
                     break;
                 case "APOD Description":
-                    var res = Nasa.GetAstroPicOfTheDay(DateTime.Now);
-                    if (res == null)
-                    {
-                        res = Nasa.GetAstroPicOfTheDay(DateTime.Now - TimeSpan.FromDays(1));
-                    }
+                    var apod = _communicationService.GetPicOfTheDayInfo();
                     await _bot.SendTextMessageAsync(
                             callbackQuery.Message.Chat.Id,
-                            res.Description);
+                            apod[2]);
                     break;
                 case "EarthPicLocation":
-                    var earthPic2 = Nasa.GetTheLatestPicOfTheEarth();
+                    var earthPic2 = _communicationService.GetLocationOfTheEarth();
                     await _bot.SendLocationAsync(
                             callbackQuery.Message.Chat.Id,
-                            (float)earthPic2.Location.Latitude,
-                            (float)earthPic2.Location.Longitude);
+                            (float)earthPic2[0],
+                            (float)earthPic2[1]);
                     break;
             }
         }
