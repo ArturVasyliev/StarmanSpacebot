@@ -13,7 +13,7 @@ namespace StarmanLibrary.Services
     {
         public string GetHelloMessage()
         {
-            return "Hello, I am Starman!!! I am somewhere and I can do something!";
+            return "Hello, I'm Starman 😃 I am ... Actually, I don't know who I am, but I know that I am in space now and..";
         }
 
         public string GetMarsStatus()
@@ -84,34 +84,34 @@ namespace StarmanLibrary.Services
 
         public string GetDefaultResponse()
         {
-            return "Damn, you are so far away from me that I can't understand you. Try again, please.";
+            return "Damn, you are so far away from me that I can't hear you! Try again, please.";
         }
 
         public string GetHomelandResponse()
         {
-            return "This is my homeland 😭";
+            return "This is my homeland, I miss it so much 😭";
         }
 
         public string GetBackResponse()
         {
-            return "Here we are!";
+            return "Here we go 🙂";
         }
 
         public string GetHelp()
         {
-            return "Damn, you are so far away from me that I can't understand you. Try again, please.";
+            return "Available commands: \n /mars \n /help";
         }
 
         public string GetSettings()
         {
-            return "Damn, you are so far away from me that I can't understand you. Try again, please.";
+            return "Why are you trying to do something with me 😠 I am who I am - Starman who rides Tesla Model X in space 😝";
         }
 
         public string GetSpacexCompanyInfo()
         {
             var companyInfo = SpaceX.GetCompanyInfo();
 
-            return $"{companyInfo.Summary}";
+            return $"{companyInfo.Name} \n {companyInfo.Summary} \n {companyInfo.Valuation} \n {companyInfo.CEO} \n {companyInfo.CreationYear} \n {companyInfo.CTO} \n {companyInfo.EmployeesAmount} \n {companyInfo.Founder} \n {companyInfo.Headquarters} \n";
         }
 
         public string GetSpacexRocketsInfo()
