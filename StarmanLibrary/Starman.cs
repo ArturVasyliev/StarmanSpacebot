@@ -74,6 +74,16 @@ namespace StarmanLibrary
             }));
         }
 
+        private IReplyMarkup spacexKeyboard;
+        private IReplyMarkup GetSpacexKeyboard()
+        {
+            return spacexKeyboard ?? (spacexKeyboard = new ReplyKeyboardMarkup(new KeyboardButton[][]
+            {
+                new [] {new KeyboardButton("Company 🌕"), new KeyboardButton("Rockets 🚀") },
+                new [] {new KeyboardButton("Launches 🛰️"), new KeyboardButton("⬅️Back") }
+            }));
+        }
+
         private IReplyMarkup picsKeyboard;
         private IReplyMarkup GetPicsKeyboard()
         {
@@ -102,19 +112,13 @@ namespace StarmanLibrary
                 case "/mars":
                     responseText = _communicationService.GetMarsStatus();
                     replyKeyboard = GetMainKeyboard();
-                    await _bot.SendTextMessageAsync(
-                        chatId,
-                        responseText,
-                        replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "Moon 🌑":
                 case "/moon":
                     responseText = _communicationService.GetMoonStatus();
                     replyKeyboard = GetMainKeyboard();
-                    await _bot.SendTextMessageAsync(
-                        chatId,
-                        responseText,
-                        replyMarkup: replyKeyboard);
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "ISS 🛰️":
                 case "/iss":
@@ -126,7 +130,29 @@ namespace StarmanLibrary
                     await _bot.SendLocationAsync(chatId, (float)location[0], (float)location[1], replyMarkup: replyKeyboard);
                     break;
                 case "SpaceX 🚀":
-                    // define the logic
+                    responseText = _communicationService.GetHomelandResponse();
+                    replyKeyboard = GetSpacexKeyboard();
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
+                    break;
+                case "Company 🌕":
+                    responseText = _communicationService.GetSpacexCompanyInfo();
+                    replyKeyboard = GetSpacexKeyboard();
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
+                    break;
+                case "Rockets 🚀":
+                    responseText = _communicationService.GetSpacexRocketsInfo();
+                    replyKeyboard = GetSpacexKeyboard();
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
+                    break;
+                case "Launches 🛰️":
+                    responseText = _communicationService.GetLaunchesInfo();
+                    replyKeyboard = GetSpacexKeyboard();
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
+                    break;
+                case "⬅️Back":
+                    responseText = _communicationService.GetBackResponse();
+                    replyKeyboard = GetMainKeyboard();
+                    await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "Astronauts 👨🏻‍🚀":
                 case "/astronauts":

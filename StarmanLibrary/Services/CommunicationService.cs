@@ -1,6 +1,8 @@
 ﻿using StarmanLibrary.Integrations.BurningSoul;
 using StarmanLibrary.Integrations.MAAS2;
+using StarmanLibrary.Integrations.NASA;
 using StarmanLibrary.Integrations.OpenNotify;
+using StarmanLibrary.Integrations.SpaceX;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -55,9 +57,44 @@ namespace StarmanLibrary.Services
             return "You can watch images from the space!!!";
         }
 
+        public string[] GetPicOfTheDayInfo()
+        {
+            var picture = Nasa.GetAstroPicOfTheDay(DateTime.Now);
+            if (picture == null)
+            {
+                picture = Nasa.GetAstroPicOfTheDay(DateTime.Now - TimeSpan.FromDays(1));
+            }
+
+            return new string[] { picture.Title, picture.Url, picture.Description };
+        }
+
+        public string[] GetPicOfTheEarthInfo()
+        {
+            var picture = Nasa.GetTheLatestPicOfTheEarth();
+
+            return new string[] { picture.ImageTitle, picture.ImageUrl };
+        }
+
+        public double[] GetLocationOfTheEarth()
+        {
+            var picture = Nasa.GetTheLatestPicOfTheEarth();
+            
+            return new double[] { picture.Location.Latitude, picture.Location.Longitude };
+        }
+
         public string GetDefaultResponse()
         {
             return "Damn, you are so far away from me that I can't understand you. Try again, please.";
+        }
+
+        public string GetHomelandResponse()
+        {
+            return "This is my homeland 😭";
+        }
+
+        public string GetBackResponse()
+        {
+            return "Here we are!";
         }
 
         public string GetHelp()
@@ -68,6 +105,27 @@ namespace StarmanLibrary.Services
         public string GetSettings()
         {
             return "Damn, you are so far away from me that I can't understand you. Try again, please.";
+        }
+
+        public string GetSpacexCompanyInfo()
+        {
+            var companyInfo = SpaceX.GetCompanyInfo();
+
+            return $"{companyInfo.Summary}";
+        }
+
+        public string GetSpacexRocketsInfo()
+        {
+            var rockets = SpaceX.GetRockets();
+
+            return $"{rockets[0].Description}";
+        }
+
+        public string GetLaunchesInfo()
+        {
+            var launch = SpaceX.GetLatestLaunch();
+
+            return $"{launch.LaunchDate}";
         }
     }
 }
