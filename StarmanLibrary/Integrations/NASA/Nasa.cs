@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StarmanLibrary.Integrations.NASA
 {
-    public class Nasa
+    public static class Nasa
     {
         private static readonly string _baseUrlAPOD = new Configuration().NasaBaseUrlAPOD;
         private static readonly string _baseUrlEPIC = new Configuration().NasaBaseUrlEPIC;

@@ -184,7 +184,7 @@ namespace StarmanLibrary
         }
 
         // This method handles messages and main buttons
-        public async void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        public void BotOnMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             Console.WriteLine("BotOnMessageReceived");
             var message = messageEventArgs.Message;
