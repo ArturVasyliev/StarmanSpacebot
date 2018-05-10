@@ -4,7 +4,7 @@ using System.Text;
 
 namespace StarmanLibrary.Integrations.BurningSoul
 {
-    public class BurningSoul
+    public static class BurningSoul
     {
         private static readonly string _baseUrl = new Configuration().BurningSoulBaseUrl;
 

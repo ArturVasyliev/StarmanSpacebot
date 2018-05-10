@@ -23,15 +23,7 @@ namespace StarmanLibrary.Integrations
 
             WebResponse webResponse = null;
 
-            try
-            {
-                webResponse = request.GetResponse();
-            }
-            catch (WebException)
-            {
-                //log
-                return default(T);
-            }
+            webResponse = request.GetResponse();
 
             string responseMessage;
             using (StreamReader sr = new StreamReader(webResponse.GetResponseStream(), Encoding.UTF8, true))

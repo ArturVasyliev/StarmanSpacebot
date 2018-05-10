@@ -7,7 +7,7 @@ using System.Text;
 namespace StarmanLibrary.Integrations.MAAS2
 {
     //https://api.maas2.jiinxt.com/(int)
-    public class Maas2
+    public static class Maas2
     {
         private static readonly string _baseUrl = new Configuration().Maas2BaseUrl;
 

@@ -3,7 +3,7 @@
     //http://api.open-notify.org/astros.json
     //http://api.open-notify.org/iss-now.json
 
-    public class OpenNotify
+    public static class OpenNotify
     {
         private static readonly string _baseUrl = new Configuration().OpenNotifyBaseUrl;
 

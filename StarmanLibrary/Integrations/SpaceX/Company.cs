@@ -32,7 +32,7 @@ namespace StarmanLibrary.Integrations.SpaceX
         public string COOPropulsion { get; set; }
 
         [JsonProperty("valuation")]
-        public int Valuation { get; set; }
+        public long Valuation { get; set; }
 
         [JsonProperty("headquarters")]
         public Headquarters Headquarters { get; set; }

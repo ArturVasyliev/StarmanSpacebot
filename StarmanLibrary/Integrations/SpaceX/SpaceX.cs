@@ -23,7 +23,7 @@ namespace StarmanLibrary.Integrations.SpaceX
     //
     //
 
-    public class SpaceX
+    public static class SpaceX
     {
         private static readonly string _baseUrl = new Configuration().SpacexBaseUrl;
 
