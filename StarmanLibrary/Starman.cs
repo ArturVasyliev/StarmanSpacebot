@@ -135,16 +135,19 @@ namespace StarmanLibrary
                     await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "Company 🌕":
+                case "/company":
                     responseText = _communicationService.GetSpacexCompanyInfo();
                     replyKeyboard = GetSpacexKeyboard();
                     await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "Rockets 🚀":
+                case "/rockets":
                     responseText = _communicationService.GetSpacexRocketsInfo();
                     replyKeyboard = GetSpacexKeyboard();
                     await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
                     break;
                 case "Launches 🛰️":
+                case "/launches":
                     responseText = _communicationService.GetLaunchesInfo();
                     replyKeyboard = GetSpacexKeyboard();
                     await _bot.SendTextMessageAsync(chatId, responseText, replyMarkup: replyKeyboard);
