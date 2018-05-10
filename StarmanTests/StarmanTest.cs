@@ -32,11 +32,35 @@ namespace StarmanTests
             return botClient;
         }
 
+        private string responseText = "responseText";
+
+        private Mock<ICommunicationService> SetupCommunicationService()
+        {
+            var communicationService = new Mock<ICommunicationService>();
+            communicationService.Setup(x => x.GetIssPosition()).Returns(new double[2] { 12, 21 });
+            communicationService.Setup(x => x.GetHelloMessage()).Returns(responseText);
+            communicationService.Setup(x => x.GetMarsStatus()).Returns(responseText);
+            communicationService.Setup(x => x.GetMoonStatus()).Returns(responseText);
+            communicationService.Setup(x => x.GetIssStatusText()).Returns(responseText);
+            communicationService.Setup(x => x.GetHomelandResponse()).Returns(responseText);
+            communicationService.Setup(x => x.GetSpacexCompanyInfo()).Returns(responseText);
+            communicationService.Setup(x => x.GetSpacexRocketsInfo()).Returns(responseText);
+            communicationService.Setup(x => x.GetLaunchesInfo()).Returns(responseText);
+            communicationService.Setup(x => x.GetBackResponse()).Returns(responseText);
+            communicationService.Setup(x => x.GetHumansInSpace()).Returns(responseText);
+            communicationService.Setup(x => x.GetSpacePics()).Returns(responseText);
+            communicationService.Setup(x => x.GetHelp()).Returns(responseText);
+            communicationService.Setup(x => x.GetSettings()).Returns(responseText);
+            communicationService.Setup(x => x.GetDefaultResponse()).Returns(responseText);
+            
+            return communicationService;
+        }
+
         private void RunProcessMessageTest(string text, 
             out Mock<ICommunicationService> communicationService, out Mock<ITelegramBotClient> botClient)
         {
+            communicationService = SetupCommunicationService();
             botClient = SetupTextBotClient();
-            communicationService = new Mock<ICommunicationService>();
 
             CallProcessMessage(text, botClient, communicationService);
         }
@@ -44,13 +68,12 @@ namespace StarmanTests
         private void RunProcessMessageTestForIss(string text, 
             out Mock<ICommunicationService> communicationService, out Mock<ITelegramBotClient> botClient)
         {
+            communicationService = SetupCommunicationService();
             botClient = SetupTextBotClient();
             botClient.Setup(bot => bot.SendLocationAsync(It.IsAny<ChatId>(),
                 It.IsAny<float>(), It.IsAny<float>(), It.IsAny<int>(),
                 It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
                 It.IsAny<CancellationToken>())).Returns(Task.FromResult(new Message())).Verifiable();
-            communicationService = new Mock<ICommunicationService>();
-            communicationService.Setup(x => x.GetIssPosition()).Returns(new double[2] { 0, 0 });
 
             CallProcessMessage(text, botClient, communicationService);
         }
@@ -60,7 +83,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("/start", out Mock<ICommunicationService> communicationService, 
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -76,7 +101,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("Mars 🌕", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -92,7 +119,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("/mars", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -108,7 +137,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("Moon 🌑", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -124,7 +155,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("/moon", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -140,7 +173,11 @@ namespace StarmanTests
         {
             RunProcessMessageTestForIss("ISS 🛰️", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+            botClient.Verify(x => x.SendLocationAsync(It.IsAny<ChatId>(), 12, 21,
+                It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(), It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -154,17 +191,165 @@ namespace StarmanTests
         [TestMethod]
         public void Starman_ProcessMessage_IssMessage_ClientCalled()
         {
-            RunProcessMessageTest("/iss", out Mock<ICommunicationService> communicationService,
+            RunProcessMessageTestForIss("/iss", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+            botClient.Verify(x => x.SendLocationAsync(It.IsAny<ChatId>(), 12, 21,
+                It.IsAny<int>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(), It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
         public void Starman_ProcessMessage_IssMessage_ServiceCalled()
         {
-            RunProcessMessageTest("/iss", out Mock<ICommunicationService> communicationService,
+            RunProcessMessageTestForIss("/iss", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
             communicationService.Verify(x => x.GetIssStatusText());
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_SpaceXEmojiMessage_ClientCalled()
+        {
+            RunProcessMessageTest("SpaceX 🚀", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_SpaceXEmojiMessage_ServiceCalled()
+        {
+            RunProcessMessageTest("SpaceX 🚀", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            communicationService.Verify(x => x.GetHomelandResponse());
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_CompanyEmojiMessage_ClientCalled()
+        {
+            RunProcessMessageTest("Company 🌕", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_CompanyEmojiMessage_ServiceCalled()
+        {
+            RunProcessMessageTest("Company 🌕", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            communicationService.Verify(x => x.GetSpacexCompanyInfo());
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_CompanyMessage_ClientCalled()
+        {
+            RunProcessMessageTest("/company", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_CompanyMessage_ServiceCalled()
+        {
+            RunProcessMessageTest("/company", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            communicationService.Verify(x => x.GetSpacexCompanyInfo());
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_RocketsEmojiMessage_ClientCalled()
+        {
+            RunProcessMessageTest("Rockets 🚀", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_RocketsEmojiMessage_ServiceCalled()
+        {
+            RunProcessMessageTest("Rockets 🚀", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            communicationService.Verify(x => x.GetSpacexRocketsInfo());
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_RocketsMessage_ClientCalled()
+        {
+            RunProcessMessageTest("/rockets", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_RocketsMessage_ServiceCalled()
+        {
+            RunProcessMessageTest("/rockets", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            communicationService.Verify(x => x.GetSpacexRocketsInfo());
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_LaunchesEmojiMessage_ClientCalled()
+        {
+            RunProcessMessageTest("Launches 🛰️", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_LaunchesEmojiMessage_ServiceCalled()
+        {
+            RunProcessMessageTest("Launches 🛰️", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            communicationService.Verify(x => x.GetLaunchesInfo());
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_LaunchesMessage_ClientCalled()
+        {
+            RunProcessMessageTest("/launches", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_BackMessage_ServiceCalled()
+        {
+            RunProcessMessageTest("⬅️Back", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            communicationService.Verify(x => x.GetBackResponse());
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_BackMessage_ClientCalled()
+        {
+            RunProcessMessageTest("⬅️Back", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
+        }
+
+        [TestMethod]
+        public void Starman_ProcessMessage_LaunchesMessage_ServiceCalled()
+        {
+            RunProcessMessageTest("/launches", out Mock<ICommunicationService> communicationService,
+                out Mock<ITelegramBotClient> botClient);
+            communicationService.Verify(x => x.GetLaunchesInfo());
         }
 
         [TestMethod]
@@ -172,7 +357,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("Astronauts 👨🏻‍🚀", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -188,7 +375,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("/astronauts", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -204,7 +393,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("Pics 🖼️", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -220,7 +411,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("/pics", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -236,7 +429,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("/help", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -252,7 +447,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest("/settings", out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]
@@ -268,7 +465,9 @@ namespace StarmanTests
         {
             RunProcessMessageTest(null, out Mock<ICommunicationService> communicationService,
                 out Mock<ITelegramBotClient> botClient);
-            botClient.VerifyAll();
+            botClient.Verify(x => x.SendTextMessageAsync(It.IsAny<ChatId>(), responseText, It.IsAny<ParseMode>(),
+                It.IsAny<bool>(), It.IsAny<bool>(), It.IsAny<int>(), It.IsAny<IReplyMarkup>(),
+                It.IsAny<CancellationToken>()));
         }
 
         [TestMethod]

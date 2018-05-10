@@ -10,7 +10,7 @@ namespace StarmanTests.Integrations.NASA
         [TestMethod]
         public void Nasa_GetAstroPicOfTheDay_ReturnsValid()
         {
-            AstroPicOfTheDay result = Nasa.GetAstroPicOfTheDay(DateTime.Now);
+            AstroPicOfTheDay result = Nasa.GetAstroPicOfTheDay(new DateTime(2018, 05, 10));
 
             Assert.IsNotNull(result);
             Assert.IsFalse(CheckDefaultValues(result));
