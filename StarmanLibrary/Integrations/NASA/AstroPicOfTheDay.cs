@@ -7,7 +7,7 @@ namespace StarmanLibrary.Integrations.NASA
         [JsonProperty("title")]
         public string Title { get; set; }
 
-        [JsonProperty("hdurl")]
+        [JsonProperty("url")]
         public string Url { get; set; }
 
         [JsonProperty("explanation")]
